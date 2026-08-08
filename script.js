@@ -2,18 +2,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Done: Mobile Navigation Dropdown
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const navMenu = document.getElementById('navMenu');
+    const navOverlay = document.getElementById('navOverlay');
 
     if (mobileMenuBtn && navMenu) {
         mobileMenuBtn.addEventListener('click', () => {
             mobileMenuBtn.classList.toggle('active');
             navMenu.classList.toggle('active');
+            if (navOverlay) {
+                navOverlay.classList.toggle('active');
+            }
+            // Prevent body scroll when menu is open
+            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
         });
+
+        // Close menu when clicking on overlay
+        if (navOverlay) {
+            navOverlay.addEventListener('click', () => {
+                mobileMenuBtn.classList.remove('active');
+                navMenu.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
 
         const navLinks = navMenu.querySelectorAll('a');
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenuBtn.classList.remove('active');
                 navMenu.classList.remove('active');
+                if (navOverlay) {
+                    navOverlay.classList.remove('active');
+                }
+                document.body.style.overflow = '';
             });
         });
     }
